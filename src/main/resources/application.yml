@@ -4,5 +4,5 @@ server:
 
 milvus:
   config:
-    host: localhost
+    host: 172.28.48.25
     port: 19530
