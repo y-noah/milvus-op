@@ -38,11 +38,13 @@ public class MilvusController {
 
     @PostMapping("insert")
     void insert(@RequestBody List<MilvusArchive> data) {
+        System.out.println("data:" + data);
         Map<Integer, List<MilvusArchive>> map =
                 data.stream()
                         .filter(item -> item.getArchiveFeature() != null)
                         .collect(Collectors.groupingBy(MilvusArchive::getOrgId));
 
+        System.out.println("map" + map);
         map.forEach((orgId, list) -> {
             //插入数据
             List<InsertParam.Field> fields = new ArrayList<>();
@@ -88,10 +90,12 @@ public class MilvusController {
     }
 
 
+    // 相似度查询
     @PostMapping("/search")
     void searchTallestSimilarity(@RequestBody Map<String, Object> request, @RequestParam(required = false) Integer orgId) {
-        // 提取并解析 arcsoftFeature
-        List<Float> featureVector = parseFeatureVector(request.get("arcsoftFeature"));
+        // 提取并解析 archiveFeature
+        List<Float> featureVector = parseFeatureVector(request.get("archiveFeature"));
+
         List<List<Float>> searchVectors = new ArrayList<>();
         searchVectors.add(featureVector);
 
@@ -115,15 +119,16 @@ public class MilvusController {
 
     private List<Float> parseFeatureVector(Object featureObject) {
         if (featureObject == null) {
-            throw new IllegalArgumentException("arcsoftFeature 不能为空");
+            throw new IllegalArgumentException("archiveFeature 不能为空");
         }
         try {
             return objectMapper.convertValue(featureObject, new TypeReference<>() {});
         } catch (Exception e) {
-            throw new RuntimeException("无法解析 arcsoftFeature，请提供正确的 JSON 数组", e);
+            throw new RuntimeException("无法解析 archiveFeature，请提供正确的 JSON 数组", e);
         }
     }
 
+    // 根据id查询
     @GetMapping("/qry")
     void qryMilvis() {
 

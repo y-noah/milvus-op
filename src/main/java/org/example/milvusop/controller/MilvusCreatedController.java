@@ -53,6 +53,8 @@ public class MilvusCreatedController {
                         .withCollectionName(FaceArchive.COLLECTION_NAME)
                         .build());
 
+        System.out.println("r:" + r);
+
         if (!r.getData()) {
             // 写入
             CreateCollectionParam createCollectionReq = CreateCollectionParam.newBuilder()

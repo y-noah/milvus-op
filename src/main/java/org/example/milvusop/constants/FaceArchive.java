@@ -48,7 +48,6 @@ public class FaceArchive {
      */
     public static String getPartitionName(Integer orgId) {
         String s = PARTITION_PREFIX + (orgId % PARTITION_NUM);
-        System.out.println("s:" + s);
         return s;
     }
 }
